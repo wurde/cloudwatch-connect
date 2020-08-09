@@ -2,7 +2,7 @@
 
 # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_dashboard
 resource "aws_cloudwatch_dashboard" "main" {
-  dashboard_name = "Monitoring2"
+  dashboard_name = "Monitoring"
 
   # The detailed information about the dashboard
   # including what widgets are included and their
@@ -72,16 +72,23 @@ resource "aws_cloudwatch_dashboard" "main" {
     EOF
 }
 
-# # https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm
-# resource "aws_cloudwatch_metric_alarm" "main" {
-#   alarm_name                = "connect-concurrency-quota-alarm"
-#   comparison_operator       = "GreaterThanOrEqualToThreshold"
-#   evaluation_periods        = "2"
-#   metric_name               = "ConcurrentCallsPercentage"
-#   namespace                 = "AWS/Connect"
-#   period                    = "120"
-#   statistic                 = "Average"
-#   threshold                 = "90"
-#   alarm_description         = "This metric monitors concurrent calls quota utilization."
-#   insufficient_data_actions = []
-# }
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm
+resource "aws_cloudwatch_metric_alarm" "main" {
+  alarm_name                = "connect-concurrency-quota-alarm"
+  comparison_operator       = "GreaterThanThreshold"
+  evaluation_periods        = "1"
+  metric_name               = "ConcurrentCallsPercentage"
+  namespace                 = "AWS/Connect"
+  period                    = "900" # 15 minutes.
+  statistic                 = "Average"
+  threshold                 = "90"
+  alarm_description         = "This metric monitors concurrent calls quota utilization."
+  datapoints_to_alarm       = 1
+  insufficient_data_actions = []
+
+  # The dimensions for the alarm's associated metric.
+  # https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/aws-services-cloudwatch-metrics.html
+  dimensions = {
+    InstanceId = var.instanceId
+  }
+}
