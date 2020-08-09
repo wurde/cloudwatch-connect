@@ -15,3 +15,13 @@ operational metrics include:
     because the queue was full.
 - **ThrottledCalls** - number of voice calls rejected
     because the rate of calls per second exceeded the max.
+
+## Why Terraform?
+
+Terraform enables Infrastructure as Code.
+[Learn more about it here](https://www.terraform.io).
+
+## License
+
+This project is __FREE__ to use, reuse, remix, and resell.
+This is made possible by the [MIT license](/LICENSE).
